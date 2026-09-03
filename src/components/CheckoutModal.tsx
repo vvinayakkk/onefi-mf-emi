@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, CheckCircle2, ShieldCheck, Sparkles, ArrowRight, Loader2 } from 'lucide-react';
-import confetti from 'canvas-confetti';
+import { X, CheckCircle2, ShieldCheck, ArrowRight, Loader2 } from 'lucide-react';
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -68,131 +67,116 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       const data = await res.json();
       if (data.success) {
         setOrderResult({ orderNumber: data.data.orderNumber });
-        confetti({
-          particleCount: 80,
-          spread: 70,
-          origin: { y: 0.6 },
-        });
       }
     } catch (err) {
-      console.error('Checkout failed', err);
+      console.error('Order creation failed', err);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100 animate-in zoom-in-95 duration-200">
-        {/* Modal Header */}
-        <div className="p-5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-amber-300" />
-            <h3 className="font-bold text-lg">1Fi Instant EMI Application</h3>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-in fade-in duration-150">
+      <div className="bg-white rounded-xl shadow-xl max-w-lg w-full overflow-hidden border border-slate-200">
+        {/* Header */}
+        <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+          <div>
+            <h3 className="font-bold text-base text-slate-900">1Fi EMI Application</h3>
+            <p className="text-xs text-slate-500">Mutual Fund Subvented Financing</p>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition-colors"
+            className="p-1 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {orderResult ? (
-          <div className="p-8 text-center space-y-4">
-            <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
-              <CheckCircle2 className="w-10 h-10" />
+          <div className="p-6 text-center space-y-4">
+            <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto border border-emerald-200">
+              <CheckCircle2 className="w-6 h-6" />
             </div>
-            <h4 className="text-2xl font-bold text-slate-900">EMI Application Approved!</h4>
-            <p className="text-sm text-slate-600">
-              Your Mutual Fund Backed EMI has been initiated. Your order identifier is:
-            </p>
-            <div className="p-3 bg-slate-100 rounded-xl font-mono text-indigo-700 font-bold text-base tracking-wider">
-              {orderResult.orderNumber}
-            </div>
-            <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-200 text-left text-xs text-emerald-800 space-y-1">
-              <p className="font-semibold flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" /> Backed by 1Fi Liquid Alpha Fund
+            <div className="space-y-1">
+              <h4 className="text-lg font-bold text-slate-900">Application Submitted</h4>
+              <p className="text-xs text-slate-500">
+                Your mutual fund backed EMI application has been saved to the database.
               </p>
-              <p>Cashback of ₹{selectedPlan.cashbackAmount.toLocaleString('en-IN')} will be credited upon first EMI clearance.</p>
+            </div>
+            <div className="p-3 bg-slate-50 rounded-lg font-mono text-slate-800 font-semibold text-xs border border-slate-200">
+              Order ID: {orderResult.orderNumber}
             </div>
             <button
               onClick={onClose}
-              className="w-full py-3 bg-slate-900 text-white rounded-xl font-semibold hover:bg-slate-800 transition-colors"
+              className="w-full py-2.5 bg-slate-900 text-white rounded-lg text-xs font-semibold hover:bg-slate-800 transition-colors"
             >
-              Done & Return to Store
+              Done
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="p-6 space-y-5">
-            {/* Product & Plan summary badge */}
-            <div className="flex items-center gap-3 p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+          <form onSubmit={handleSubmit} className="p-6 space-y-4">
+            {/* Product & Plan summary */}
+            <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
               <img
                 src={variantImage}
                 alt={productName}
-                className="w-12 h-12 object-contain rounded-lg bg-white p-1 border border-slate-200"
+                className="w-10 h-10 object-contain mix-blend-multiply"
               />
               <div className="flex-1 min-w-0">
-                <div className="text-xs font-semibold text-indigo-600 uppercase tracking-wide">Selected Plan</div>
-                <div className="font-bold text-slate-900 text-sm truncate">{productName}</div>
-                <div className="text-xs text-slate-500">
-                  ₹{selectedPlan.monthlyEmi.toLocaleString('en-IN')}/mo × {selectedPlan.tenureMonths} mos ({selectedPlan.interestRate}% int)
+                <div className="font-semibold text-slate-900 text-xs truncate">{productName}</div>
+                <div className="text-[11px] text-slate-500">
+                  ₹{selectedPlan.monthlyEmi.toLocaleString('en-IN')}/mo × {selectedPlan.tenureMonths} mos ({selectedPlan.interestRate}% interest)
                 </div>
               </div>
-              <div className="text-right">
-                <div className="text-xs text-slate-400">Total Price</div>
-                <div className="font-bold text-slate-900 text-sm">₹{price.toLocaleString('en-IN')}</div>
+              <div className="text-right font-bold text-slate-900 text-xs">
+                ₹{price.toLocaleString('en-IN')}
               </div>
             </div>
 
             {/* Applicant details */}
-            <div className="space-y-3 text-sm">
+            <div className="space-y-3 text-xs">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Full Name</label>
+                <label className="block font-medium text-slate-700 mb-1">Full Name</label>
                 <input
                   type="text"
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 text-sm"
-                  placeholder="e.g. John Doe"
+                  className="w-full px-3 py-2 rounded-md border border-slate-300 focus:outline-none focus:ring-1 focus:ring-slate-900 text-slate-900 text-xs"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Mobile Number</label>
+                  <label className="block font-medium text-slate-700 mb-1">Mobile Number</label>
                   <input
                     type="tel"
                     required
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-3.5 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 text-sm"
-                    placeholder="9876543210"
+                    className="w-full px-3 py-2 rounded-md border border-slate-300 focus:outline-none focus:ring-1 focus:ring-slate-900 text-slate-900 text-xs"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">PAN Number</label>
+                  <label className="block font-medium text-slate-700 mb-1">PAN Number</label>
                   <input
                     type="text"
                     required
                     value={formData.panNumber}
                     onChange={(e) => setFormData({ ...formData, panNumber: e.target.value.toUpperCase() })}
-                    className="w-full px-3.5 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 uppercase text-sm"
-                    placeholder="ABCDE1234F"
+                    className="w-full px-3 py-2 rounded-md border border-slate-300 focus:outline-none focus:ring-1 focus:ring-slate-900 text-slate-900 uppercase text-xs"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Email Address</label>
+                <label className="block font-medium text-slate-700 mb-1">Email Address</label>
                 <input
                   type="email"
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 text-sm"
-                  placeholder="john@example.com"
+                  className="w-full px-3 py-2 rounded-md border border-slate-300 focus:outline-none focus:ring-1 focus:ring-slate-900 text-slate-900 text-xs"
                 />
               </div>
             </div>
@@ -203,10 +187,10 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 id="kyc"
                 checked={formData.kycAgreed}
                 onChange={(e) => setFormData({ ...formData, kycAgreed: e.target.checked })}
-                className="mt-0.5 rounded text-indigo-600 focus:ring-indigo-500"
+                className="mt-0.5 rounded border-slate-300 text-slate-900 focus:ring-slate-900"
               />
-              <label htmlFor="kyc" className="text-[11px] text-slate-500 leading-tight">
-                I authorize 1Fi to check my CIBIL score and verify KYC for Mutual Fund pledge financing.
+              <label htmlFor="kyc" className="text-[11px] text-slate-500">
+                I agree to the terms of mutual fund backed financing.
               </label>
             </div>
 
@@ -214,15 +198,16 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
             <button
               type="submit"
               disabled={loading || !formData.kycAgreed}
-              className="w-full py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-indigo-200 transition-all text-sm"
+              className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-lg font-medium text-xs flex items-center justify-center gap-2 transition-colors"
             >
               {loading ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" /> Verifying & Processing...
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" /> Processing...
                 </>
               ) : (
                 <>
-                  Confirm & Activate EMI Plan <ArrowRight className="w-4 h-4" />
+                  <span>Submit Application</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </>
               )}
             </button>
