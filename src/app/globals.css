@@ -2,38 +2,131 @@
 
 @layer base {
   :root {
-    --primary: #6366F1;
-    --primary-hover: #4F46E5;
-    --accent: #10B981;
-    --background: #F8FAFC;
-    --surface: #FFFFFF;
-    --text-primary: #0F172A;
-    --text-secondary: #64748B;
-    --border: #E2E8F0;
+    --bg-canvas: #EAEBED;
+    --card-surface: #FFFFFF;
+    --card-border: rgba(226, 232, 240, 0.8);
+    --pill-active-bg: #111827;
+    --pill-active-text: #FFFFFF;
+    --brand-orange: #FF6B00;
+    --brand-blue: #2563EB;
+    --brand-green: #10B981;
+    --text-heading: #0F172A;
+    --text-muted: #64748B;
   }
 }
 
 body {
-  background-color: var(--background);
-  color: var(--text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-canvas);
+  color: var(--text-heading);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Custom smooth animations & glassmorphism */
-.glass-panel {
+/* Premium Zentra Neomorphic & Glass Morphic Card Styles */
+.zentra-card {
+  background: #FFFFFF;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04), 0 8px 10px -6px rgba(15, 23, 42, 0.02);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.zentra-card:hover {
+  box-shadow: 0 20px 35px -10px rgba(15, 23, 42, 0.07);
+}
+
+.zentra-card-inset {
+  background: #F8FAFC;
+  border-radius: 20px;
+  border: 1px solid #E2E8F0;
+}
+
+/* Rounded Zentra Controls */
+.zentra-pill-nav {
+  background: #E2E8F0;
+  border-radius: 9999px;
+  padding: 4px;
+}
+
+.zentra-pill-btn {
+  border-radius: 9999px;
+  padding: 6px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.zentra-pill-active {
+  background: #18181B;
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.zentra-pill-inactive {
+  color: #52525B;
+}
+.zentra-pill-inactive:hover {
+  color: #18181B;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Striped Bar Effect from Image */
+.bar-striped-blue {
+  background: repeating-linear-gradient(
+    -45deg,
+    #3B82F6,
+    #3B82F6 4px,
+    #2563EB 4px,
+    #2563EB 8px
+  );
+}
+
+.bar-striped-green {
+  background: repeating-linear-gradient(
+    -45deg,
+    #10B981,
+    #10B981 4px,
+    #059669 4px,
+    #059669 8px
+  );
+}
+
+.bar-striped-pink {
+  background: repeating-linear-gradient(
+    -45deg,
+    #F43F5E,
+    #F43F5E 4px,
+    #E11D48 4px,
+    #E11D48 8px
+  );
+}
+
+/* Glass Floating Input Bar */
+.zentra-glass-input {
   background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 20px;
+  box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.08);
 }
 
-.plan-card-selected {
-  border-color: #6366F1 !important;
-  background-color: #F5F3FF !important;
-  box-shadow: 0 4px 20px -2px rgba(99, 102, 241, 0.15);
+/* Gradient Hologram Insights Banner */
+.zentra-insights-banner {
+  background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 40%, #D97706 80%, #F59E0B 100%);
+  border-radius: 24px;
+  color: #FFFFFF;
 }
 
-.glow-subtle {
-  box-shadow: 0 10px 30px -5px rgba(99, 102, 241, 0.12);
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
 }

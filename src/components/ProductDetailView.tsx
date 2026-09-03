@@ -11,7 +11,10 @@ import {
   Info,
   ArrowRight,
   Zap,
-  HelpCircle,
+  MoreHorizontal,
+  Layers,
+  CheckCircle2,
+  ChevronLeft,
 } from 'lucide-react';
 import { EmiCalculationService } from '@/services/emiService';
 import { CheckoutModal } from '@/components/CheckoutModal';
@@ -55,15 +58,11 @@ export interface ProductDetailProps {
 }
 
 export const ProductDetailView: React.FC<ProductDetailProps> = ({ product }) => {
-  // Find default variant or first
   const initialVariant = product.variants.find((v) => v.isDefault) || product.variants[0];
   const [selectedVariant, setSelectedVariant] = useState<VariantType>(initialVariant);
-
-  // Default to 12 months or first available plan
   const [selectedTenure, setSelectedTenure] = useState<number>(12);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState<boolean>(false);
 
-  // Group unique colors & unique storages
   const colorOptions = useMemo(() => {
     const map = new Map<string, VariantType>();
     product.variants.forEach((v) => {
@@ -78,7 +77,6 @@ export const ProductDetailView: React.FC<ProductDetailProps> = ({ product }) => 
     return Array.from(set);
   }, [product.variants]);
 
-  // Compute calculated plans dynamically based on selected variant price
   const dynamicPlans = useMemo(() => {
     const plans = product.emiPlans.length > 0 ? product.emiPlans : EmiCalculationService.generateDefaultPlans(selectedVariant.price);
     return plans.map((plan) => {
@@ -99,7 +97,6 @@ export const ProductDetailView: React.FC<ProductDetailProps> = ({ product }) => 
     });
   }, [product.emiPlans, selectedVariant.price]);
 
-  // Active selected plan breakdown
   const activePlan = useMemo(() => {
     return (
       dynamicPlans.find((p) => p.tenureMonths === selectedTenure) ||
@@ -122,40 +119,54 @@ export const ProductDetailView: React.FC<ProductDetailProps> = ({ product }) => 
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-      {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-xs text-slate-500 mb-6 font-medium">
-        <Link href="/" className="hover:text-indigo-600 transition-colors">Home</Link>
-        <span>/</span>
-        <span className="text-slate-400">{product.brand}</span>
-        <span>/</span>
-        <span className="text-slate-900 font-semibold">{product.name}</span>
-      </nav>
+    <div className="max-w-[1440px] mx-auto px-4 sm:px-8 pb-16 space-y-6">
+      
+      {/* Back button & Breadcrumb */}
+      <div className="flex items-center justify-between">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 bg-white px-3.5 py-2 rounded-xl border border-slate-200 shadow-xs hover:bg-slate-50 transition-colors"
+        >
+          <ChevronLeft className="w-4 h-4" />
+          <span>Back to Overview</span>
+        </Link>
+        <div className="text-xs text-slate-400 font-semibold">
+          Database ID: <span className="font-mono text-slate-600">{product.id || product.slug}</span>
+        </div>
+      </div>
 
-      {/* Main Product Layout (Matching 1Fi Mockup) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+      {/* Main Product Zentra Bento Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
-        {/* Left Column: Product Showcase Card */}
-        <div className="lg:col-span-5">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm relative overflow-hidden flex flex-col items-center text-center">
+        {/* Left Column: Device Presentation Card */}
+        <div className="lg:col-span-5 space-y-6">
+          <div className="zentra-card p-6 sm:p-8 flex flex-col items-center text-center relative overflow-hidden">
             
-            {/* Header info inside card */}
+            {/* Header info */}
             <div className="w-full text-left space-y-1 mb-4">
-              {product.badge && (
-                <span className="text-[11px] font-extrabold tracking-wider text-rose-500 uppercase">
-                  {product.badge}
-                </span>
-              )}
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              <div className="flex items-center justify-between">
+                {product.badge ? (
+                  <span className="text-[10px] font-black px-2 py-0.5 rounded-md bg-zinc-900 text-white uppercase tracking-wider">
+                    {product.badge}
+                  </span>
+                ) : (
+                  <span className="text-xs font-bold text-slate-400 uppercase">{product.brand}</span>
+                )}
+                <button className="w-7 h-7 rounded-full border border-slate-200 flex items-center justify-center text-slate-400">
+                  <MoreHorizontal className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+              <h1 className="text-3xl font-black text-slate-900 tracking-tight pt-2">
                 {product.name}
               </h1>
               <p className="text-sm font-semibold text-slate-500">
-                {selectedVariant.storage}
+                {selectedVariant.storage} • {selectedVariant.colorName}
               </p>
             </div>
 
             {/* Product Image Frame */}
-            <div className="relative w-full aspect-square max-w-[340px] my-4 flex items-center justify-center p-4">
+            <div className="relative w-full aspect-square max-w-[340px] my-4 flex items-center justify-center p-4 bg-slate-50/70 rounded-2xl border border-slate-100">
               <img
                 src={selectedVariant.imageUrl}
                 alt={selectedVariant.title}
@@ -163,9 +174,9 @@ export const ProductDetailView: React.FC<ProductDetailProps> = ({ product }) => 
               />
             </div>
 
-            {/* Finish indicator & Swatches */}
-            <div className="mt-4 pt-4 border-t border-slate-100 w-full flex flex-col items-center gap-2.5">
-              <span className="text-xs font-medium text-slate-500">
+            {/* Finishes Swatch Selector */}
+            <div className="w-full pt-4 border-t border-slate-100 flex flex-col items-center gap-2.5">
+              <span className="text-xs font-bold text-slate-500">
                 Available in {colorOptions.length} finishes
               </span>
               <div className="flex items-center gap-3">
@@ -178,7 +189,7 @@ export const ProductDetailView: React.FC<ProductDetailProps> = ({ product }) => 
                       title={v.colorName}
                       className={`w-7 h-7 rounded-full transition-all flex items-center justify-center ${
                         isSelected
-                          ? 'ring-2 ring-indigo-600 ring-offset-2 scale-110'
+                          ? 'ring-2 ring-zinc-900 ring-offset-2 scale-110 shadow-sm'
                           : 'hover:scale-105 opacity-80'
                       }`}
                       style={{ backgroundColor: v.colorHex }}
@@ -190,21 +201,21 @@ export const ProductDetailView: React.FC<ProductDetailProps> = ({ product }) => 
                   );
                 })}
               </div>
-              <span className="text-xs font-bold text-slate-700">
+              <span className="text-xs font-black text-slate-800">
                 {selectedVariant.colorName}
               </span>
             </div>
 
-            {/* Storage capacity selector */}
+            {/* Storage capacity pills */}
             {storageOptions.length > 1 && (
               <div className="w-full mt-4 pt-4 border-t border-slate-100 flex items-center justify-center gap-2">
                 {storageOptions.map((stg) => (
                   <button
                     key={stg}
                     onClick={() => handleStorageChange(stg)}
-                    className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                       selectedVariant.storage === stg
-                        ? 'bg-slate-900 text-white shadow-sm'
+                        ? 'bg-zinc-900 text-white shadow-sm'
                         : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                     }`}
                   >
@@ -215,129 +226,134 @@ export const ProductDetailView: React.FC<ProductDetailProps> = ({ product }) => 
             )}
           </div>
 
-          {/* Mutual fund backing explanation card */}
-          <div className="mt-6 p-5 bg-gradient-to-br from-indigo-50/80 via-purple-50/50 to-white rounded-2xl border border-indigo-100 text-xs text-slate-700 space-y-2">
-            <div className="flex items-center gap-2 font-bold text-indigo-950 text-sm">
-              <TrendingUp className="w-4 h-4 text-indigo-600" />
-              How 1Fi Mutual Fund Backed EMI Works
+          {/* Liquid MF Subvention Card */}
+          <div className="zentra-card p-6 text-xs text-slate-700 space-y-2.5 border-l-4 border-l-blue-600">
+            <div className="flex items-center gap-2 font-black text-slate-900 text-sm">
+              <TrendingUp className="w-4 h-4 text-blue-600" />
+              <span>How 1Fi Mutual Fund Backed Financing Works</span>
             </div>
             <p className="leading-relaxed text-slate-600">
-              Instead of paying high interest to credit card banks (~16-24% p.a.), your purchase is financed through institutional liquid mutual fund subvention, guaranteeing 0% interest on tenures up to 24 months plus instant cashbacks.
+              Purchases are financed through high-liquidity mutual fund subvention yields rather than high credit card interest rates (~18-24%), giving you 0% interest on tenures up to 24 months with guaranteed upfront cashbacks.
             </p>
           </div>
         </div>
 
-        {/* Right Column: Pricing, EMI Options & Dynamic Plans (Matches Reference) */}
+        {/* Right Column: Dynamic EMI Plans & Live Calculation */}
         <div className="lg:col-span-7 space-y-6">
           
-          {/* Price Header */}
-          <div className="space-y-1">
-            <div className="flex items-baseline gap-3">
-              <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                ₹{selectedVariant.price.toLocaleString('en-IN')}
-              </span>
-              <span className="text-lg text-slate-400 line-through font-medium">
-                ₹{selectedVariant.mrp.toLocaleString('en-IN')}
-              </span>
-              <span className="text-xs font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
+          <div className="zentra-card p-6 sm:p-8 space-y-6">
+            
+            {/* Price Header */}
+            <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-slate-100 pb-4">
+              <div>
+                <div className="flex items-baseline gap-3">
+                  <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+                    ₹{selectedVariant.price.toLocaleString('en-IN')}
+                  </span>
+                  <span className="text-lg text-slate-400 line-through font-medium">
+                    ₹{selectedVariant.mrp.toLocaleString('en-IN')}
+                  </span>
+                </div>
+                <h2 className="text-base font-bold text-slate-600 mt-1">
+                  EMI plans backed by mutual funds
+                </h2>
+              </div>
+              <span className="text-xs font-black text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full self-start sm:self-auto">
                 Save ₹{(selectedVariant.mrp - selectedVariant.price).toLocaleString('en-IN')}
               </span>
             </div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-700">
-              EMI plans backed by mutual funds
-            </h2>
-          </div>
 
-          {/* List of Available EMI Plans */}
-          <div className="space-y-3">
-            {dynamicPlans.map((plan) => {
-              const isSelected = selectedTenure === plan.tenureMonths;
-              const isZero = plan.interestRate === 0;
+            {/* List of Available Dynamic EMI Plans */}
+            <div className="space-y-3">
+              {dynamicPlans.map((plan) => {
+                const isSelected = selectedTenure === plan.tenureMonths;
+                const isZero = plan.interestRate === 0;
 
-              return (
-                <div
-                  key={plan.tenureMonths}
-                  onClick={() => setSelectedTenure(plan.tenureMonths)}
-                  className={`p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer relative ${
-                    isSelected
-                      ? 'border-indigo-600 bg-indigo-50/40 ring-2 ring-indigo-600/20 shadow-sm'
-                      : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50'
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-4">
-                    {/* Monthly Amount and Tenure */}
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-lg sm:text-xl font-black text-slate-900">
-                        ₹{plan.monthlyEmi.toLocaleString('en-IN')}
-                      </span>
-                      <span className="text-sm font-bold text-slate-600">
-                        × {plan.tenureMonths} months
-                      </span>
+                return (
+                  <div
+                    key={plan.tenureMonths}
+                    onClick={() => setSelectedTenure(plan.tenureMonths)}
+                    className={`p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer relative ${
+                      isSelected
+                        ? 'border-blue-600 bg-blue-50/50 ring-2 ring-blue-500/20 shadow-md'
+                        : 'border-slate-200/90 bg-white hover:border-slate-300 hover:bg-slate-50/60'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      {/* Monthly Amount and Tenure */}
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-xl font-black text-slate-900">
+                          ₹{plan.monthlyEmi.toLocaleString('en-IN')}
+                        </span>
+                        <span className="text-xs font-bold text-slate-500">
+                          × {plan.tenureMonths} months
+                        </span>
+                      </div>
+
+                      {/* Interest Rate Tag */}
+                      <div className="text-right">
+                        <span
+                          className={`text-sm font-black ${
+                            isZero ? 'text-slate-900' : 'text-slate-700'
+                          }`}
+                        >
+                          {plan.interestRate}% interest
+                        </span>
+                      </div>
                     </div>
 
-                    {/* Interest Rate Tag */}
-                    <div className="text-right">
-                      <span
-                        className={`text-sm sm:text-base font-extrabold ${
-                          isZero ? 'text-slate-900' : 'text-slate-700'
-                        }`}
-                      >
-                        {plan.interestRate}% interest
-                      </span>
-                    </div>
+                    {/* Cashback Callout */}
+                    {plan.cashbackAmount > 0 && (
+                      <div className="mt-2 text-xs font-bold text-emerald-600 flex items-center gap-1">
+                        <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
+                        Additional cashback of ₹{plan.cashbackAmount.toLocaleString('en-IN')}
+                      </div>
+                    )}
+
+                    {/* Expanded details when selected */}
+                    {isSelected && (
+                      <div className="mt-3 pt-3 border-t border-blue-100 flex flex-wrap items-center justify-between text-xs text-slate-600 gap-2 animate-in fade-in duration-150">
+                        <div>
+                          Total Payable: <strong className="text-slate-900 font-bold">₹{plan.totalPayable.toLocaleString('en-IN')}</strong>
+                        </div>
+                        <div className="text-blue-700 font-bold flex items-center gap-1">
+                          <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
+                          {plan.mutualFundBacking || '1Fi Liquid Alpha Fund'}
+                        </div>
+                      </div>
+                    )}
                   </div>
+                );
+              })}
+            </div>
 
-                  {/* Cashback Callout */}
-                  {plan.cashbackAmount > 0 && (
-                    <div className="mt-2 text-xs font-bold text-emerald-600 flex items-center gap-1">
-                      <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
-                      Additional cashback of ₹{plan.cashbackAmount.toLocaleString('en-IN')}
-                    </div>
-                  )}
+            {/* Action CTA Button */}
+            <div className="pt-4 space-y-3">
+              <button
+                onClick={() => setIsCheckoutOpen(true)}
+                className="w-full py-4 px-6 rounded-2xl bg-zinc-900 hover:bg-zinc-800 active:scale-[0.99] text-white font-black text-sm sm:text-base shadow-xl transition-all flex items-center justify-center gap-2"
+              >
+                <span>Proceed with ₹{activePlan.monthlyEmi.toLocaleString('en-IN')}/mo Plan</span>
+                <ArrowRight className="w-5 h-5 text-orange-400" />
+              </button>
 
-                  {/* Sub-details when selected */}
-                  {isSelected && (
-                    <div className="mt-3 pt-3 border-t border-indigo-100/80 flex flex-wrap items-center justify-between text-xs text-slate-600 gap-2 animate-in fade-in duration-150">
-                      <div>
-                        Total Payable: <strong className="text-slate-900 font-bold">₹{plan.totalPayable.toLocaleString('en-IN')}</strong>
-                      </div>
-                      <div className="text-indigo-700 font-semibold flex items-center gap-1">
-                        <ShieldCheck className="w-3.5 h-3.5 text-indigo-600" />
-                        {plan.mutualFundBacking || '1Fi Liquid Alpha Fund'}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Action CTA Button & Summary */}
-          <div className="pt-4 space-y-3 sticky bottom-4 z-20 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200 shadow-xl lg:static lg:bg-transparent lg:border-none lg:shadow-none lg:p-0">
-            <button
-              onClick={() => setIsCheckoutOpen(true)}
-              className="w-full py-4 px-6 rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-extrabold text-base shadow-lg shadow-indigo-500/25 transition-all flex items-center justify-center gap-2"
-            >
-              <span>Proceed with ₹{activePlan.monthlyEmi.toLocaleString('en-IN')}/mo Plan</span>
-              <ArrowRight className="w-5 h-5" />
-            </button>
-
-            <div className="flex items-center justify-center gap-6 text-[11px] text-slate-500 font-medium">
-              <span className="flex items-center gap-1">
-                <Check className="w-3.5 h-3.5 text-emerald-600" /> Instant Digital Approval
-              </span>
-              <span className="flex items-center gap-1">
-                <Check className="w-3.5 h-3.5 text-emerald-600" /> No Hidden Bank Charges
-              </span>
-              <span className="flex items-center gap-1">
-                <Check className="w-3.5 h-3.5 text-emerald-600" /> Cancel Anytime
-              </span>
+              <div className="flex items-center justify-center gap-6 text-[11px] text-slate-500 font-semibold pt-1">
+                <span className="flex items-center gap-1">
+                  <Check className="w-3.5 h-3.5 text-emerald-600" /> Instant Digital Approval
+                </span>
+                <span className="flex items-center gap-1">
+                  <Check className="w-3.5 h-3.5 text-emerald-600" /> No Hidden Bank Charges
+                </span>
+                <span className="flex items-center gap-1">
+                  <Check className="w-3.5 h-3.5 text-emerald-600" /> 100% Paperless KYC
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Checkout Application Modal */}
+      {/* Checkout Modal */}
       <CheckoutModal
         isOpen={isCheckoutOpen}
         onClose={() => setIsCheckoutOpen(false)}
