@@ -1,27 +1,125 @@
-# 1Fi SDE1 Assignment - Mutual Fund Backed EMI Web Application
+# 1Fi Mutual Fund Backed EMI Web Application
 
-A full-stack web application developed for the **1Fi SDE1 Assignment** that displays products (flagship smartphones, laptops) with multiple dynamic EMI plans backed by mutual funds, featuring clean architecture, SOLID design principles, zero hardcoding, and PostgreSQL database integration with Prisma ORM.
+A full-stack web application that displays products (flagship smartphones and laptops) with dynamic EMI plans backed by institutional mutual funds, dynamic variant selection, pricing, interest calculations, and order checkout flows connected to a PostgreSQL database with Prisma ORM.
 
 ---
 
-## 🌟 Live Demo & Video Deliverables
+## 🌟 Live Demo & Repository
 
-- **Live Deployed App (Vercel)**: [https://onefi-mf-emi.vercel.app](https://onefi-mf-emi.vercel.app)
+- **Live Deployed App**: [https://onefi-mf-emi.vercel.app](https://onefi-mf-emi.vercel.app)
 - **GitHub Repository**: [https://github.com/vvinayakkk/onefi-mf-emi](https://github.com/vvinayakkk/onefi-mf-emi)
-- **Demo Walkthrough Video**: *(Upload to Google Drive / YouTube with public link)*
 
 ---
 
-## 🛠️ Tech Stack & Engineering Standards
+## 🛠️ Tech Stack
 
-- **Frontend**: Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS, Lucide Icons, Canvas Confetti.
-- **Backend**: Next.js Server Components + Type-safe Route Handlers (`/api/v1/*`).
-- **Database & ORM**: PostgreSQL (hosted on Neon Serverless Postgres), Prisma ORM.
-- **Design & Architecture**:
-  - **SOLID Principles**: Clean separation of Concerns (Presentation -> Services -> Repositories -> ORM).
-  - **Zero Hardcoding**: Centralized error codes in `src/constants/errors.ts` and app constants in `src/constants/app.ts`.
-  - **Type-safe Validation**: Zod schema validation on all mutation endpoints.
-  - **Resilience**: Dual-mode data access (PostgreSQL live database with in-memory fallback).
+- **Frontend**: Next.js (App Router), React, TypeScript, Tailwind CSS, Lucide Icons.
+- **Backend**: Node.js Serverless Route Handlers (`/api/v1/*`).
+- **Database & ORM**: PostgreSQL (Neon Serverless), Prisma ORM.
+- **Validation**: Zod schema validation.
+
+---
+
+## 🚀 Quick Setup & Local Run Instructions
+
+Follow these step-by-step instructions to clone, configure, seed, and run this project locally or initialize it as your own repository.
+
+### 1. Clone or Copy the Repository
+```bash
+git clone https://github.com/vvinayakkk/onefi-mf-emi.git
+cd onefi-mf-emi
+```
+
+### 2. (Optional) Re-initialize as Your Own Fresh Git Repository
+If you want to push this project under your own GitHub account:
+```bash
+# On Mac/Linux:
+rm -rf .git
+git init
+git add .
+git commit -m "Initial commit: 1Fi full-stack EMI application"
+git branch -M main
+git remote add origin https://github.com/<YOUR_GITHUB_USERNAME>/<YOUR_REPO_NAME>.git
+git push -u origin main
+
+# On Windows (PowerShell):
+Remove-Item -Recurse -Force .git
+git init
+git add .
+git commit -m "Initial commit: 1Fi full-stack EMI application"
+git branch -M main
+git remote add origin https://github.com/<YOUR_GITHUB_USERNAME>/<YOUR_REPO_NAME>.git
+git push -u origin main
+```
+
+---
+
+### 3. Install Dependencies
+```bash
+npm install
+```
+
+---
+
+### 4. Setup Environment Variables (`.env`)
+Create a `.env` file in the project root by copying the template:
+
+```bash
+cp .env.example .env
+```
+
+Open `.env` and set your PostgreSQL database connection URL (you can get a free instant database from [neon.tech](https://neon.tech) or Supabase):
+
+```env
+DATABASE_URL="postgresql://<USER>:<PASSWORD>@<HOST>/<DATABASE>?sslmode=require"
+```
+
+---
+
+### 5. Push Database Schema & Run Seeding
+Run Prisma schema sync to create the tables in your PostgreSQL database, followed by the seed script:
+
+```bash
+# 1. Push schema tables to database
+npx prisma db push
+
+# 2. Seed products, variants, and EMI plans into database
+npx tsx prisma/seed.ts
+```
+
+---
+
+### 6. Run the Application Locally
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## ☁️ Deployment Instructions (Vercel)
+
+Deploying both frontend, backend APIs, and PostgreSQL connectivity takes less than 2 minutes:
+
+### Option A: Using Vercel CLI
+```bash
+# 1. Login to Vercel
+npx vercel login
+
+# 2. Add your database connection string to production environment
+npx vercel env add DATABASE_URL production
+
+# 3. Deploy to production
+npx vercel --prod
+```
+
+### Option B: Using Vercel Web Dashboard
+1. Push your repository to your GitHub account.
+2. Go to [https://vercel.com/new](https://vercel.com/new).
+3. Import your repository.
+4. Under **Environment Variables**, add:
+   - `DATABASE_URL`: *(Your PostgreSQL connection string)*
+5. Click **Deploy**.
 
 ---
 
@@ -37,7 +135,7 @@ model Product {
   description String
   basePrice   Float
   mrp         Float
-  badge       String?          // e.g. "NEW", "FLAGSHIP"
+  badge       String?
   rating      Float            @default(4.8)
   reviewCount Int              @default(1250)
   createdAt   DateTime         @default(now())
@@ -53,10 +151,10 @@ model ProductVariant {
   id           String      @id @default(cuid())
   productId    String
   product      Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
-  title        String      // e.g. "Desert Titanium / 256 GB"
-  colorName    String      // e.g. "Desert Titanium"
-  colorHex     String      // e.g. "#D4A373"
-  storage      String      // e.g. "256 GB"
+  title        String
+  colorName    String
+  colorHex     String
+  storage      String
   mrp          Float
   price        Float
   imageUrl     String
@@ -73,9 +171,9 @@ model EmiPlan {
   id                String      @id @default(cuid())
   productId         String?
   product           Product?    @relation(fields: [productId], references: [id], onDelete: Cascade)
-  tenureMonths      Int         // 3, 6, 12, 24, 36, 48, 60
-  interestRate      Float       // 0.0 or 10.5
-  cashbackAmount    Float       @default(0.0) // e.g. 7500
+  tenureMonths      Int
+  interestRate      Float
+  cashbackAmount    Float       @default(0.0)
   isPopular         Boolean     @default(false)
   minDownPayment    Float       @default(0.0)
   mutualFundBacking String      @default("1Fi Liquid Alpha Fund")
@@ -111,36 +209,6 @@ model Order {
 
 ---
 
-## 🚀 Setup & Run Instructions
-
-### 1. Clone & Install Dependencies
-```bash
-git clone https://github.com/vvinayakkk/onefi-mf-emi.git
-cd onefi-mf-emi
-npm install
-```
-
-### 2. Configure Environment Variables
-Copy `.env.example` to `.env`:
-```bash
-cp .env.example .env
-```
-Provide your PostgreSQL connection string in `DATABASE_URL`.
-
-### 3. Database Push & Seeding
-```bash
-npx prisma db push
-npx tsx prisma/seed.ts
-```
-
-### 4. Run Development Server
-```bash
-npm run dev
-```
-Open [http://localhost:3000](http://localhost:3000) to view the application.
-
----
-
 ## 📡 API Endpoints & Example Responses
 
 ### 1. Health Status
@@ -151,43 +219,22 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
   "statusCode": 200,
   "data": {
     "status": "healthy",
-    "uptime": 142.5,
-    "timestamp": "2026-09-03T17:50:00.000Z",
     "database": {
       "status": "connected (PostgreSQL via Prisma)",
-      "latencyMs": 14
-    },
-    "service": "1Fi SDE1 Mutual Fund Backed EMI Engine"
+      "latencyMs": 28
+    }
   }
 }
 ```
 
 ### 2. List Products
 `GET /api/v1/products`
-```json
-{
-  "success": true,
-  "statusCode": 200,
-  "data": [
-    {
-      "slug": "apple-iphone-17-pro",
-      "name": "iPhone 17 Pro",
-      "brand": "Apple",
-      "basePrice": 127400,
-      "mrp": 134900,
-      "variants": [ ... ],
-      "emiPlans": [ ... ]
-    }
-  ]
-}
-```
 
 ### 3. Get Product by Slug
-`GET /api/v1/products/apple-iphone-17-pro`
+`GET /api/v1/products/:slug` (e.g. `GET /api/v1/products/apple-iphone-17-pro`)
 
-### 4. EMI Calculation Engine
+### 4. Calculate Custom EMI
 `POST /api/v1/emi/calculate`
-**Payload:**
 ```json
 {
   "principalAmount": 127400,
@@ -196,34 +243,15 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
   "cashbackAmount": 7500
 }
 ```
-**Response:**
-```json
-{
-  "success": true,
-  "statusCode": 200,
-  "data": {
-    "principal": 127400,
-    "loanAmount": 127400,
-    "tenureMonths": 12,
-    "annualInterestRate": 0,
-    "monthlyEmi": 10617,
-    "totalPayable": 127400,
-    "totalInterest": 0,
-    "cashback": 7500,
-    "effectiveCost": 119900,
-    "savingsVersusCreditCard": 11340
-  }
-}
-```
 
 ### 5. Submit Order Application
 `POST /api/v1/orders`
 ```json
 {
-  "customerName": "Vinayak Sharma",
-  "customerEmail": "vinayak@example.com",
+  "customerName": "John Doe",
+  "customerEmail": "john@example.com",
   "customerPhone": "9876543210",
-  "variantId": "Desert Titanium / 256 GB",
+  "variantId": "cmtltqnja000x11dc7pk9oyi8",
   "totalAmount": 127400,
   "tenureMonths": 12,
   "monthlyEmi": 10617,
@@ -231,11 +259,3 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
   "cashback": 7500
 }
 ```
-
----
-
-## ⚖️ Clean Code Principles Demonstrated
-- **Modular Services**: Isolated EMI amortization and MF yield mathematics.
-- **Centralized Error Codes**: Every API error inherits from standard error contracts with distinct HTTP status codes.
-- **Dynamic Routing**: Unique slug routing with high-performance SSR and SEO metadata.
-- **Interactive UI**: Pixel-accurate implementation of 1Fi mockups with variant switching, live plan recalculations, and checkout flows.
