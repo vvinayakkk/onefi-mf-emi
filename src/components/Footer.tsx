@@ -55,13 +55,6 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-2 text-slate-400">
-          <div>© {new Date().getFullYear()} 1Fi Store. All rights reserved.</div>
-          <div className="flex items-center gap-4">
-            <Link href="/" className="hover:text-slate-600">Privacy Policy</Link>
-            <Link href="/" className="hover:text-slate-600">Terms of Service</Link>
-          </div>
-        </div>
       </div>
     </footer>
   );
