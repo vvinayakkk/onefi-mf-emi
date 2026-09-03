@@ -236,7 +236,7 @@ export const ProductDetailView: React.FC<ProductDetailProps> = ({ product }) => 
               <span className="text-base text-slate-400 line-through">
                 ₹{selectedVariant.mrp.toLocaleString('en-IN')}
               </span>
-              <span className="text-xs font-semibold px-2 py-0.5 rounded border border-emerald-200 text-emerald-700 bg-emerald-50/50">
+              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full border border-emerald-300 text-emerald-700">
                 Save ₹{(selectedVariant.mrp - selectedVariant.price).toLocaleString('en-IN')}
               </span>
             </div>

@@ -49,7 +49,7 @@ export default async function HomePage() {
                       {product.brand}
                     </span>
                     {product.badge && (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full border border-slate-300 text-slate-700">
                         {product.badge}
                       </span>
                     )}

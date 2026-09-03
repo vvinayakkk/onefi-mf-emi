@@ -40,7 +40,7 @@ export const Header: React.FC = () => {
 
         {/* Right Status */}
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200 flex items-center gap-1.5">
+          <span className="text-xs font-semibold text-emerald-700 px-3 py-1 rounded-full border border-emerald-300 flex items-center gap-1.5">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
             0% Interest EMI
           </span>
