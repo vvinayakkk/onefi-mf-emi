@@ -1,0 +1,96 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Product {
+  id          String           @id @default(cuid())
+  slug        String           @unique
+  name        String
+  brand       String
+  category    String           @default("Smartphones")
+  description String
+  basePrice   Float
+  mrp         Float
+  badge       String?          // e.g. "NEW", "POPULAR", "BESTSELLER"
+  rating      Float            @default(4.8)
+  reviewCount Int              @default(1250)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  variants    ProductVariant[]
+  emiPlans    EmiPlan[]
+
+  @@index([slug])
+  @@index([brand])
+}
+
+model ProductVariant {
+  id           String      @id @default(cuid())
+  productId    String
+  product      Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  title        String      // e.g. "Desert Titanium / 256 GB"
+  colorName    String      // e.g. "Desert Titanium"
+  colorHex     String      // e.g. "#D4A373"
+  storage      String      // e.g. "256 GB"
+  mrp          Float
+  price        Float
+  imageUrl     String
+  stockCount   Int         @default(25)
+  isDefault    Boolean     @default(false)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  orders       Order[]
+
+  @@index([productId])
+}
+
+model EmiPlan {
+  id                String      @id @default(cuid())
+  productId         String?
+  product           Product?    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  tenureMonths      Int         // 3, 6, 12, 24, 36, 48, 60
+  interestRate      Float       // 0.0 or 10.5
+  cashbackAmount    Float       @default(0.0) // e.g. 7500
+  isPopular         Boolean     @default(false)
+  minDownPayment    Float       @default(0.0)
+  mutualFundBacking String      @default("1Fi Liquid Alpha Fund")
+  processingFee     Float       @default(0.0)
+  createdAt         DateTime    @default(now())
+
+  @@index([productId])
+  @@index([tenureMonths])
+}
+
+model Order {
+  id            String         @id @default(cuid())
+  orderNumber   String         @unique
+  customerName  String
+  customerEmail String
+  customerPhone String
+  status        OrderStatus    @default(PENDING)
+  totalAmount   Float
+  downPayment   Float
+  tenureMonths  Int
+  monthlyEmi    Float
+  interestRate  Float
+  cashback      Float          @default(0.0)
+  variantId     String
+  variant       ProductVariant @relation(fields: [variantId], references: [id])
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([orderNumber])
+  @@index([customerEmail])
+}
+
+enum OrderStatus {
+  PENDING
+  APPROVED
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
