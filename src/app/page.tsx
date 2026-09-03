@@ -98,38 +98,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Customer Trust / Benefits Bar */}
-      <section className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
-        <div className="p-4 rounded-xl bg-white border border-slate-200 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-            <ShieldCheck className="w-5 h-5" />
-          </div>
-          <div>
-            <h4 className="font-bold text-slate-900 text-xs">0% Interest Tenures</h4>
-            <p className="text-[11px] text-slate-500">No hidden bank charges or processing fee</p>
-          </div>
-        </div>
-
-        <div className="p-4 rounded-xl bg-white border border-slate-200 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
-            <Zap className="w-5 h-5" />
-          </div>
-          <div>
-            <h4 className="font-bold text-slate-900 text-xs">Instant Digital Approval</h4>
-            <p className="text-[11px] text-slate-500">100% paperless KYC verified in seconds</p>
-          </div>
-        </div>
-
-        <div className="p-4 rounded-xl bg-white border border-slate-200 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
-            <ShieldCheck className="w-5 h-5" />
-          </div>
-          <div>
-            <h4 className="font-bold text-slate-900 text-xs">Guaranteed Cashback</h4>
-            <p className="text-[11px] text-slate-500">Up to ₹10,000 direct account credit</p>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
