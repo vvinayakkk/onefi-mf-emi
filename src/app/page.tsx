@@ -8,15 +8,15 @@ export default async function HomePage() {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 space-y-10">
       
-      {/* Real Customer Banner */}
-      <section className="bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-2xl p-8 sm:p-12 space-y-4">
-        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-indigo-200 border border-white/10">
+      {/* Hero Intro Banner */}
+      <section className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-3">
+        <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium text-slate-700 border border-slate-300">
           Mutual Fund Backed Financing
         </span>
-        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
           Upgrade to Flagship Tech on 0% Interest EMI
         </h1>
-        <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
+        <p className="text-slate-600 text-sm max-w-2xl leading-relaxed">
           Finance your next smartphone or laptop through institutional mutual fund subvention. Enjoy zero-cost monthly installments up to 24 months and instant cashback.
         </p>
       </section>
