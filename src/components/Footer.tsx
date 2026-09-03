@@ -4,17 +4,17 @@ import { OneFiLogo } from './OneFiLogo';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-slate-50 border-t border-slate-200 mt-20 text-xs text-slate-500">
+    <footer className="bg-white border-t border-slate-200 mt-20 text-xs text-slate-500">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           
           <div className="space-y-2 md:col-span-2">
             <div className="flex items-center gap-2">
               <OneFiLogo size={24} />
-              <span className="font-bold text-slate-800 text-sm">1Fi Capital Services</span>
+              <span className="font-bold text-slate-800 text-sm">1Fi Store</span>
             </div>
             <p className="text-slate-500 text-xs leading-relaxed max-w-sm">
-              Mutual fund-backed consumer financing engine. Developed for the 1Fi SDE1 assignment demonstrating full-stack architecture with Next.js, PostgreSQL, and Prisma.
+              Purchase premium smartphones and laptops with 0% interest and flexible EMI plans backed by mutual fund subvention.
             </p>
           </div>
 
@@ -45,35 +45,21 @@ export const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h4 className="font-semibold text-slate-800 mb-2.5">API Documentation</h4>
-            <ul className="space-y-1.5 text-xs">
-              <li>
-                <Link href="/api/v1/health" target="_blank" className="hover:text-slate-900 transition-colors">
-                  GET /api/v1/health
-                </Link>
-              </li>
-              <li>
-                <Link href="/api/v1/products" target="_blank" className="hover:text-slate-900 transition-colors">
-                  GET /api/v1/products
-                </Link>
-              </li>
-              <li>
-                <Link href="/api/v1/products/apple-iphone-17-pro" target="_blank" className="hover:text-slate-900 transition-colors">
-                  GET /api/v1/products/:slug
-                </Link>
-              </li>
+            <h4 className="font-semibold text-slate-800 mb-2.5">Why 1Fi?</h4>
+            <ul className="space-y-1.5 text-xs text-slate-500">
+              <li>0% Interest up to 24 Months</li>
+              <li>No Processing Fee</li>
+              <li>Instant Paperless Approval</li>
+              <li>SEBI-Regulated Partners</li>
             </ul>
           </div>
         </div>
 
-        <div className="pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-slate-400">
-          <div>© {new Date().getFullYear()} 1Fi Capital. All rights reserved.</div>
-          <div className="flex items-center gap-3">
-            <span>Clean Architecture</span>
-            <span>•</span>
-            <span>TypeScript</span>
-            <span>•</span>
-            <span>PostgreSQL</span>
+        <div className="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-2 text-slate-400">
+          <div>© {new Date().getFullYear()} 1Fi Store. All rights reserved.</div>
+          <div className="flex items-center gap-4">
+            <Link href="/" className="hover:text-slate-600">Privacy Policy</Link>
+            <Link href="/" className="hover:text-slate-600">Terms of Service</Link>
           </div>
         </div>
       </div>

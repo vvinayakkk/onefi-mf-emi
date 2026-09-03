@@ -1,54 +1,38 @@
 import Link from 'next/link';
 import { ProductRepository } from '@/repositories/productRepository';
-import {
-  ArrowRight,
-  ShieldCheck,
-  Percent,
-  CheckCircle,
-  HelpCircle,
-  Smartphone,
-  Laptop,
-} from 'lucide-react';
+import { ArrowRight, ShieldCheck, Zap } from 'lucide-react';
 
 export default async function HomePage() {
   const products = await ProductRepository.findAll();
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 space-y-12">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 space-y-10">
       
-      {/* Intro Header Section */}
-      <section className="border-b border-slate-200 pb-8 space-y-3">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold border border-indigo-200 text-indigo-700 bg-indigo-50/50">
-            SDE1 Assignment
-          </span>
-          <span className="text-xs text-slate-400">•</span>
-          <span className="text-xs text-slate-500 font-medium">
-            Dynamic Database-Backed Product EMI Engine
-          </span>
-        </div>
-
-        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-          Mutual Fund Backed EMI Plans
+      {/* Real Customer Banner */}
+      <section className="bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-2xl p-8 sm:p-12 space-y-4">
+        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-indigo-200 border border-white/10">
+          Mutual Fund Backed Financing
+        </span>
+        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+          Upgrade to Flagship Tech on 0% Interest EMI
         </h1>
-
-        <p className="text-sm text-slate-600 max-w-3xl leading-relaxed">
-          Select a flagship device below to view real-time dynamic variant pricing, color finishes, and amortized EMI tenures backed by institutional liquid mutual fund subvention.
+        <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
+          Finance your next smartphone or laptop through institutional mutual fund subvention. Enjoy zero-cost monthly installments up to 24 months and instant cashback.
         </p>
       </section>
 
-      {/* Product Catalog Grid */}
+      {/* Products Grid */}
       <section className="space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-bold text-slate-900">
-            Featured Products ({products.length})
+          <h2 className="text-xl font-bold text-slate-900">
+            Available Devices
           </h2>
-          <span className="text-xs text-slate-500">
-            PostgreSQL Database Synced
+          <span className="text-xs text-slate-500 font-medium">
+            Instant Digital Approval
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {products.map((product: any) => {
             const defaultVariant = product.variants.find((v: any) => v.isDefault) || product.variants[0];
             const lowestEmi = Math.round(defaultVariant.price / 24);
@@ -57,23 +41,21 @@ export default async function HomePage() {
               <Link
                 key={product.slug}
                 href={`/products/${product.slug}`}
-                className="clean-card p-4 flex flex-col justify-between group hover:border-slate-400 transition-colors"
+                className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between group"
               >
                 <div>
-                  {/* Badge & Brand */}
                   <div className="flex items-center justify-between text-xs mb-2">
-                    <span className="text-[11px] font-medium text-slate-500">
+                    <span className="text-slate-400 font-medium uppercase tracking-wider text-[10px]">
                       {product.brand}
                     </span>
                     {product.badge && (
-                      <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded border border-slate-200 text-slate-700 bg-slate-50">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
                         {product.badge}
                       </span>
                     )}
                   </div>
 
-                  {/* Device Image Box */}
-                  <div className="w-full aspect-square bg-slate-50 rounded-lg p-4 flex items-center justify-center mb-3 border border-slate-100">
+                  <div className="w-full aspect-square bg-slate-50 rounded-xl p-4 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-200">
                     <img
                       src={defaultVariant.imageUrl}
                       alt={product.name}
@@ -81,34 +63,32 @@ export default async function HomePage() {
                     />
                   </div>
 
-                  {/* Product Title & Variants Info */}
-                  <h3 className="font-semibold text-slate-900 text-sm group-hover:text-indigo-600 transition-colors">
+                  <h3 className="font-bold text-slate-900 text-base group-hover:text-indigo-600 transition-colors">
                     {product.name}
                   </h3>
-                  <div className="text-xs text-slate-500 mt-1">
-                    {product.variants.length} finishes • {defaultVariant.storage}
-                  </div>
+                  <p className="text-xs text-slate-500 mt-1">
+                    {product.variants.length} color finishes • {defaultVariant.storage}
+                  </p>
                 </div>
 
-                {/* Pricing & CTA */}
-                <div className="pt-3 mt-3 border-t border-slate-100 space-y-2">
+                <div className="pt-4 mt-4 border-t border-slate-100 space-y-3">
                   <div className="flex items-baseline justify-between">
                     <div>
-                      <div className="text-[10px] text-slate-400 font-medium">Starting from</div>
-                      <div className="font-bold text-slate-900 text-base">
+                      <div className="text-[10px] text-slate-400 font-medium">From</div>
+                      <div className="font-bold text-slate-900 text-lg">
                         ₹{defaultVariant.price.toLocaleString('en-IN')}
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-[10px] text-emerald-700 font-medium">0% Interest</div>
+                      <div className="text-[11px] text-emerald-600 font-bold">0% Interest</div>
                       <div className="text-xs font-bold text-indigo-600">
                         ₹{lowestEmi.toLocaleString('en-IN')}/mo
                       </div>
                     </div>
                   </div>
 
-                  <div className="w-full py-2 bg-slate-900 group-hover:bg-indigo-600 text-white rounded-lg text-xs font-semibold transition-colors text-center flex items-center justify-center gap-1">
-                    <span>View EMI Plans</span>
+                  <div className="w-full py-2.5 bg-slate-900 group-hover:bg-indigo-600 text-white rounded-xl text-xs font-bold transition-colors text-center flex items-center justify-center gap-1.5 shadow-sm">
+                    <span>Explore EMI Plans</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </div>
                 </div>
@@ -118,23 +98,35 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Technical Architecture Notes for Reviewers */}
-      <section className="p-5 rounded-xl border border-slate-200 bg-white space-y-3">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
-          Architecture & Implementation Details
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-600">
-          <div>
-            <span className="font-semibold text-slate-900 block mb-1">Backend & REST APIs</span>
-            Node.js Server Routes at <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-800">/api/v1/products</code> and <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-800">/api/v1/orders</code> with Zod validation.
+      {/* Customer Trust / Benefits Bar */}
+      <section className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
+        <div className="p-4 rounded-xl bg-white border border-slate-200 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+            <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
-            <span className="font-semibold text-slate-900 block mb-1">Database & ORM</span>
-            PostgreSQL on Neon with Prisma ORM schema migrations and seed scripts.
+            <h4 className="font-bold text-slate-900 text-xs">0% Interest Tenures</h4>
+            <p className="text-[11px] text-slate-500">No hidden bank charges or processing fee</p>
+          </div>
+        </div>
+
+        <div className="p-4 rounded-xl bg-white border border-slate-200 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+            <Zap className="w-5 h-5" />
           </div>
           <div>
-            <span className="font-semibold text-slate-900 block mb-1">Code Quality Standards</span>
-            Separation of Concerns (Service/Repository layers), centralized error codes, zero hardcoded values.
+            <h4 className="font-bold text-slate-900 text-xs">Instant Digital Approval</h4>
+            <p className="text-[11px] text-slate-500">100% paperless KYC verified in seconds</p>
+          </div>
+        </div>
+
+        <div className="p-4 rounded-xl bg-white border border-slate-200 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+            <ShieldCheck className="w-5 h-5" />
+          </div>
+          <div>
+            <h4 className="font-bold text-slate-900 text-xs">Guaranteed Cashback</h4>
+            <p className="text-[11px] text-slate-500">Up to ₹10,000 direct account credit</p>
           </div>
         </div>
       </section>
