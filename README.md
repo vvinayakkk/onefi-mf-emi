@@ -6,7 +6,7 @@ A full-stack web application developed for the **1Fi SDE1 Assignment** that disp
 
 ## 🌟 Live Demo & Video Deliverables
 
-- **Live Deployed App (Vercel)**: [https://onefi-mf-emi.vercel.app](https://onefi-mf-emi.vercel.app) *(or your Vercel deployment link)*
+- **Live Deployed App (Vercel)**: [https://onefi-mf-emi.vercel.app](https://onefi-mf-emi.vercel.app)
 - **GitHub Repository**: [https://github.com/vvinayakkk/onefi-mf-emi](https://github.com/vvinayakkk/onefi-mf-emi)
 - **Demo Walkthrough Video**: *(Upload to Google Drive / YouTube with public link)*
 
