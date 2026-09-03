@@ -1,128 +1,54 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import {
-  Search,
-  Bell,
-  Sparkles,
-  Link2,
-  Calendar,
-  ChevronDown,
-  Plus,
-  ShieldCheck,
-  Zap,
-} from 'lucide-react';
+import { OneFiLogo } from './OneFiLogo';
+import { ShieldCheck, ExternalLink, Activity } from 'lucide-react';
 
 export const Header: React.FC = () => {
-  const pathname = usePathname();
-
-  const navItems = [
-    { name: 'Products', href: '/' },
-    { name: 'EMI Plans', href: '/#plans' },
-    { name: 'Mutual Funds', href: '/#funds' },
-    { name: 'Analytics', href: '/#analytics' },
-    { name: 'Orders', href: '/#orders' },
-    { name: 'Health', href: '/api/v1/health', target: '_blank' },
-  ];
-
   return (
-    <header className="px-4 sm:px-8 pt-6 pb-2">
-      <div className="max-w-[1440px] mx-auto">
-        {/* Top Floating Shell Nav */}
-        <div className="flex items-center justify-between gap-4 py-2">
-          
-          {/* Logo & Brand */}
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-white shadow-sm font-black text-sm">
-              <span className="tracking-tighter">1Fi</span>
-            </div>
-            <span className="font-extrabold text-xl tracking-tight text-slate-900">
-              zentra <span className="text-xs font-bold text-orange-500">× 1Fi</span>
+    <header className="sticky top-0 z-40 bg-white border-b border-slate-200">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        
+        {/* Brand Logo & Name */}
+        <Link href="/" className="flex items-center gap-3">
+          <OneFiLogo size={32} />
+          <div className="flex flex-col">
+            <span className="font-bold text-slate-900 text-base leading-tight tracking-tight">
+              1Fi <span className="text-xs font-medium text-slate-500">Capital</span>
             </span>
+            <span className="text-[11px] text-slate-400">Mutual Fund-Backed Consumer Credit</span>
+          </div>
+        </Link>
+
+        {/* Center Navigation Links */}
+        <nav className="hidden md:flex items-center gap-6 text-xs font-medium text-slate-600">
+          <Link href="/" className="hover:text-slate-900 transition-colors">
+            All Products
           </Link>
+          <Link href="/products/apple-iphone-17-pro" className="hover:text-slate-900 transition-colors">
+            iPhone 17 Pro
+          </Link>
+          <Link href="/products/samsung-galaxy-s24-ultra" className="hover:text-slate-900 transition-colors">
+            Galaxy S24 Ultra
+          </Link>
+          <Link href="/products/macbook-pro-14-m3" className="hover:text-slate-900 transition-colors">
+            MacBook Pro M3
+          </Link>
+          <Link href="/products/google-pixel-9-pro" className="hover:text-slate-900 transition-colors">
+            Pixel 9 Pro
+          </Link>
+        </nav>
 
-          {/* Center Pill Menu (Matching Reference) */}
-          <nav className="hidden lg:flex items-center bg-slate-200/80 p-1.5 rounded-full backdrop-blur-md">
-            {navItems.map((item) => {
-              const isActive = pathname === item.href || (item.href === '/' && pathname.startsWith('/products'));
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  target={item.target}
-                  className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${
-                    isActive
-                      ? 'bg-zinc-900 text-white shadow-sm'
-                      : 'text-zinc-600 hover:text-zinc-950 hover:bg-white/40'
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* Right Utilities (Search, Bell, User Profile) */}
-          <div className="flex items-center gap-3">
-            <button className="w-9 h-9 rounded-full bg-white/80 border border-slate-200/80 flex items-center justify-center text-slate-600 hover:bg-white transition-colors shadow-xs">
-              <Search className="w-4 h-4" />
-            </button>
-            <button className="w-9 h-9 rounded-full bg-white/80 border border-slate-200/80 flex items-center justify-center text-slate-600 hover:bg-white transition-colors shadow-xs relative">
-              <Bell className="w-4 h-4" />
-              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-orange-500"></span>
-            </button>
-            <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-white shadow-sm">
-              <img
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80"
-                alt="Profile"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Action Toolbar Header (Overview Row) */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-6 mb-4">
-          <div className="flex items-center gap-3">
-            <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              Overview
-            </h1>
-            <div className="w-8 h-8 rounded-full bg-white border border-slate-200/80 flex items-center justify-center text-slate-400 hover:text-slate-700 shadow-xs cursor-pointer">
-              <Link2 className="w-4 h-4" />
-            </div>
-          </div>
-
-          {/* Date Picker & Action Widgets Bar */}
-          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-700">
-            <div className="flex items-center gap-2 bg-white px-3.5 py-2 rounded-xl border border-slate-200 shadow-xs">
-              <Calendar className="w-3.5 h-3.5 text-slate-400" />
-              <span>Jan 01 - Dec 31</span>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-            </div>
-
-            <span className="text-slate-400 text-xs hidden sm:inline">compared to</span>
-
-            <div className="flex items-center gap-2 bg-white px-3.5 py-2 rounded-xl border border-slate-200 shadow-xs">
-              <Calendar className="w-3.5 h-3.5 text-slate-400" />
-              <span>Prior Period</span>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-            </div>
-
-            <div className="flex items-center gap-1 bg-white px-3 py-2 rounded-xl border border-slate-200 shadow-xs">
-              <span>Live DB Sync</span>
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            </div>
-
-            <Link
-              href="/#catalog"
-              className="flex items-center gap-1.5 bg-zinc-900 hover:bg-zinc-800 text-white px-4 py-2 rounded-xl shadow-xs transition-colors"
-            >
-              <Plus className="w-3.5 h-3.5" />
-              <span>New EMI Application</span>
-            </Link>
-          </div>
+        {/* Right Status */}
+        <div className="flex items-center gap-3 text-xs">
+          <Link
+            href="/api/v1/health"
+            target="_blank"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-slate-200 text-slate-600 hover:border-slate-300 transition-colors"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            <span>API Status</span>
+            <ExternalLink className="w-3 h-3 text-slate-400" />
+          </Link>
         </div>
       </div>
     </header>
